@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/var/www/chevy/app/Arquivo.php</file>
+            <file>file:/var/www/chevy/app/Services/ProcessoTwoService.php</file>
+            <file>file:/var/www/chevy/app/Http/Requests/FormPlanilhaVisitasRequest.php</file>
+            <file>file:/var/www/chevy/app/Http/Controllers/ProcessoTwoController.php</file>
             <file>file:/var/www/chevy/app/Http/Controllers/Admin/VisitasController.php</file>
-            <file>file:/var/www/chevy/resources/views/admin/visitas/index.blade.php</file>
-            <file>file:/var/www/chevy/resources/views/admin/hotlist/index.blade.php</file>
+            <file>file:/var/www/chevy/app/Repositories/EnviosProcessoTwoRepository.php</file>
+            <file>file:/var/www/chevy/routes/web.php</file>
+            <file>file:/var/www/chevy/app/Repositories/ArquivosRepository.php</file>
+            <file>file:/var/www/chevy/app/Http/Requests/ImageUploadRequest.php</file>
         </group>
     </open-files>
 </project-private>

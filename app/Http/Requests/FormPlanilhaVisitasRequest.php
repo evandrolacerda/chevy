@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Services\ProcessoOneService;
 use Illuminate\Support\Facades\Auth;
+use App\Arquivo;
 use App\Role;
 use App\Processo;
 
@@ -52,17 +53,23 @@ class FormPlanilhaVisitasRequest extends FormRequest {
 
             $this->validateExtension();
 
-            $nomePlanilha = sprintf("%s.%s", md5(microtime() . Auth::user()->email . ProcessoOneService::FILE_PLANILHA_VISITAS), $this->file('visitas')->getClientOriginalExtension());
+            $nomePlanilha = sprintf("%s.%s", md5(microtime() . 
+                        Auth::user()->email . 
+                        Arquivo::FILE_PLANILHA_VISITAS), 
+                        $this->file('visitas')->getClientOriginalExtension()
+                    );
 
 
             $this->file('visitas')->storeAs('public/visitas/', $nomePlanilha);
 
             $data = [
-                'tipo_arquivo_id' => ProcessoOneService::FILE_PLANILHA_VISITAS,
-                'nome_arquivo' => $nomePlanilha,
+                'tipo_arquivo_id' => Arquivo::FILE_PLANILHA_VISITAS,
+                'arquivo' => $nomePlanilha,
                 'mes' => date('m'),
                 'ano' => date('Y'),
-                'user_id' => Auth::user()->id
+                'user_id' => Auth::user()->id,
+                'processo_id' => 2
+                
             ];
 
             $this->service->save($data);

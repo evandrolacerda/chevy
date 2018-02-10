@@ -9,12 +9,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ImageUploadRequest extends FormRequest {
 
-    private $enviosRepo;
-    
     private $service;
-    
     private $competencia;
-    
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -23,11 +20,11 @@ class ImageUploadRequest extends FormRequest {
     public function authorize() {
         return true;
     }
-    
+
     public function __construct() {
-        $this->enviosRepo = new \App\Repositories\EnviosProcessoTwoRepository();  
+
         $this->service = new \App\Services\ProcessoTwoService();
-        
+
         $this->competencia = $this->service->getCompetencia();
     }
 
@@ -60,8 +57,6 @@ class ImageUploadRequest extends FormRequest {
         Storage::put($thumbsPath, (String) $canvas->encode());
         //$canvas->save( $thumbsPath );
     }
-    
-    
 
     public function resizeAndUpload($file, $path) {
 
@@ -88,7 +83,10 @@ class ImageUploadRequest extends FormRequest {
             'user_id' => Auth::user()->id,
             'mes' => $mes,
             'ano' => $ano,
-            'path' => $path
+            'arquivo' => 'storage/' . $path,
+            'thumbs_path' => 'storage/thumbs/' . $path,
+            'tipo_arquivo_id' => \App\Arquivo::FILE_FOTO_VISITA,
+            'processo_id' => 2
         ];
 
         try {
@@ -103,12 +101,11 @@ class ImageUploadRequest extends FormRequest {
             $mes = $this->competencia->format('m');
             $ano = $this->competencia->format('Y');
             $userId = Auth::user()->id;
-            
-            if( $this->enviosRepo->getFilesRemaining($userId, $mes, $ano) <= 0 )
-            {
+
+            if ($this->service->getFilesRemaining($userId, $mes, $ano) <= 0) {
                 throw new \Exception('Já foram enviadas todas as fotos permitidas para esta competência');
             }
-            
+
             $fileName = md5(microtime() . $file->getClientOriginalName());
 
             $directory = sprintf("fotos/visitas/%s/%s/%s", Auth::user()->id, $this->competencia->format('Y'), $this->competencia->format('m')
@@ -120,7 +117,7 @@ class ImageUploadRequest extends FormRequest {
             $this->generateThumbnail($file, $fullPath);
 
             $this->saveToDatabase(
-                    $mes, $ano , $fullPath
+                    $mes, $ano, $fullPath
             );
         }
     }

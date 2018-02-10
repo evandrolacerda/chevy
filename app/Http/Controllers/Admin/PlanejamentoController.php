@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Arquivo;
+
 
 class PlanejamentoController extends Controller
 {
@@ -16,7 +18,7 @@ class PlanejamentoController extends Controller
     {
         
         $mes = date('m');
-        $ano = date('y');
+        $ano = date('Y');
         
         if( $request->query('ano')){
             $ano = (int) $request->query('ano');
@@ -25,47 +27,17 @@ class PlanejamentoController extends Controller
             $mes = (int) $request->query('mes');
         }
         
-        $repo = new \App\Repositories\EnviosProcessoOneRepository( new \App\ProcessoOneEnvios());
-        $visitas = $repo->getPlanilhasVisitas($mes, $ano);
-        $metas = $repo->getPlanilhasMetas($mes, $ano);
+        $repo = new \App\Repositories\ArquivosRepository();
         
-                
+        
+        $visitas    = $repo->getArquivosBy($mes, $ano, Arquivo::FILE_PLANILHA_VISITAS );
+        $metas      = $repo->getArquivosBy($mes, $ano, Arquivo::FILE_PLANILHA_METAS );
+        
         return view('admin.planejamento.index', compact('visitas', 'metas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
+    
+        /**
      * Show the form to inalidate the file
      *
      * @param  int  $id
@@ -73,23 +45,13 @@ class PlanejamentoController extends Controller
      */
     public function edit($id)
     {
-        $arquivo = \App\ProcessoOneEnvios::findOrFail($id);
+        $arquivo = \App\Arquivo::findOrFail($id);
         
         
         return view('admin.planejamento.edit', compact($arquivo));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -99,7 +61,6 @@ class PlanejamentoController extends Controller
      */
     public function destroy($id)
     {
-        $arquivo = \App\ProcessoOneEnvios::findOrFail($id);
         
         
     }

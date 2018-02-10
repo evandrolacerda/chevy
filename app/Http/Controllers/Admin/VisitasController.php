@@ -9,13 +9,12 @@ use App\Http\Controllers\Controller;
 
 class VisitasController extends Controller
 {
-    private $enviosRepo;
+    
     private $usersRepo;
     private $utilAlbum;
 
     public function __construct() {
         
-        $this->enviosRepo = new \App\Repositories\EnviosProcessoTwoRepository();
         $this->usersRepo = new \App\Repositories\UsersRepository();
 
     }

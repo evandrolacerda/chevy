@@ -6,40 +6,41 @@
     <li><a href="#">Planejamento</a></li>
 </ol>
 
-   <div class="col-md-12">
+<div class="panel">
+    <div class="panel-body">
 
-        <form class="navbar-form navbar-right">
-            <div class="form-group">
-                <select name="mes" class="form-control">
-                    <option value="1">Janeiro</option>
-                    <option value="2">Fevereiro</option>
-                    <option value="3">Março</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Maio</option>
-                    <option value="6">Junho</option>
-                    <option value="7">Julho</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <select name="ano" class="form-control col-md-6 col-sm-6">
-                    <option value="2018">2018</option>
-                    <option value="2018">2019</option>
-                    <option value="2019">2020</option>
-                    <option value="2021">2021</option>
-                </select>  
-            </div>
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </form>
+            <form class="navbar-form">
+                <div class="form-group">
+                    <div class="col-md-6 col-sm-6">
+                        <select name="mes" class="form-control">
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <select name="ano" class="form-control col-md-6 col-sm-6">
+                        <option value="2018">2018</option>
+                        <option value="2018">2019</option>
+                        <option value="2019">2020</option>
+                        <option value="2021">2021</option>
+                    </select>  
+                </div>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </form>
 
     </div>
-    <hr>
-
-<hr>
+</div>
 <h1>Envios do Processo P1 - Planejamento</h1>
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -83,7 +84,7 @@
                                 <td>{{$visita->mes}}</td>
                                 <td>{{$visita->ano}}</td>
                                 <td class="text-center">
-                                    <a href="{{url('/storage/visitas/' .$visita->nome_arquivo)}}" class="btn btn-success btn-sm">
+                                    <a href="{{url('/storage/visitas/' .$visita->arquivo)}}" class="btn btn-success btn-sm">
                                         <span class="glyphicon glyphicon-download"></span>
                                         Donwload
                                     </a>
@@ -110,6 +111,7 @@
                                 <th>Colaborador</th>
                                 <th>Enviado em</th>
                                 <th>Download</th>
+                                <th>Download</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,9 +119,21 @@
                             <tr>
                                 <td>{{$meta->user->name}}</td>
                                 <td>{{date('d/m/Y H:i:s', strtotime($meta->created_at))}}</td>
+
                                 <td class="text-center">
-                                    <a href="">
+                                    <a href="{{url('/storage/metas/' .$meta->arquivo)}}" class="btn btn-success btn-sm">
                                         <span class="glyphicon glyphicon-download"></span>
+                                        Download
+
+                                    </a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{url('/admin/processo/invalidar/1/'. $meta->user_id . '/' .
+                                                $meta->mes . '/' . $meta->ano)}}" 
+
+                                       class="btn btn-danger btn-sm">
+                                        <span class="glyphicon glyphicon-ban-circle"></span>
+                                        Invalidar
                                     </a>
                                 </td>
                             </tr>

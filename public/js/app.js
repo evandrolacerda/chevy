@@ -48632,7 +48632,7 @@ var render = function() {
                     _vm._v(" "),
                     _c("input", {
                       staticClass: "form-control input-sm col-md-7 col-xs-12",
-                      attrs: { id: "local", type: "text", name: "local" },
+                      attrs: { id: "legenda", type: "text", name: "legenda" },
                       domProps: { value: _vm.legenda }
                     })
                   ])

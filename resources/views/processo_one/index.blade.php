@@ -16,7 +16,7 @@
 @include('partials.metas')
 @else
 <div class="alert alert-dismissable alert-success">
-    <p>Você já enviou o arquivo de <metas></metas>.</p>
+    <p>Você já enviou o arquivo de Metas.</p>
 </div>
 @endif
 @endsection

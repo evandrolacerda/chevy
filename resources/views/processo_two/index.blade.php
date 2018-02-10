@@ -94,7 +94,7 @@
         var form = $("#" + id);
 
         var data = {
-            local: form.find('#local').val(),
+            legenda: form.find('#legenda').val(),
             data: form.find('#data').val(),
             _token: document.head.querySelector('meta[name="csrf-token"]').content,
             id: id,

@@ -15,7 +15,7 @@
                     <label>
                     Local
                     </label>
-                        <input id="local" class="form-control input-sm col-md-7 col-xs-12" :value="legenda" type="text" name="local">
+                        <input id="legenda" class="form-control input-sm col-md-7 col-xs-12" :value="legenda" type="text" name="legenda">
                 </div>
             </div>
             <div class="form-group">

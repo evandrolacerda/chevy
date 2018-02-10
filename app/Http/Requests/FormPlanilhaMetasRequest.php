@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Services\ProcessoOneService;
+use App\Arquivo;
 use App\Processo;
 use App\Role;
 use Illuminate\Support\Facades\Auth;
@@ -52,18 +53,19 @@ class FormPlanilhaMetasRequest extends FormRequest {
                 $this->validateExtension();
 
                 $nomePlanilha = sprintf("%s.%s", md5(microtime() . 
-                        Auth::user()->email . ProcessoOneService::FILE_PLANILHA_METAS), 
+                        Auth::user()->email . Arquivo::FILE_PLANILHA_METAS), 
                         $this->file('metas')->getClientOriginalExtension());
 
 
                 $this->file('metas')->storeAs('publi/metas/', $nomePlanilha);
 
                 $data = [
-                    'tipo_arquivo_id' => ProcessoOneService::FILE_PLANILHA_METAS,
+                    'tipo_arquivo_id' => Arquivo::FILE_PLANILHA_METAS,
                     'nome_arquivo' => $nomePlanilha,
                     'mes' => date('m'),
                     'ano' => date('Y'),
-                    'user_id' => Auth::user()->id
+                    'user_id' => Auth::user()->id,
+                    'processo_id' => 1
                 ];
 
                 $this->service->save($data);

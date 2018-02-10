@@ -4,25 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Util\Calendar;
 use \App\Http\Requests\ImageUploadRequest;
-use \App\Repositories\EnviosProcessoTwoRepository;
-use Illuminate\Http\Exceptions\PostTooLargeException ;
+use \Illuminate\Support\Facades\Validator;
+    
 class ProcessoTwoController extends Controller {
 
-    private $enviosRepo;
     private $competencia;
     private $numberFilesToSend;
-
     private $service;
-    
-    public function __construct() {
+    private $arquivosRepo;
 
-        $this->enviosRepo = new EnviosProcessoTwoRepository();
+    public function __construct() {
+        
         $this->service = new \App\Services\ProcessoTwoService();
+
+        $this->arquivosRepo = new \App\Repositories\ArquivosRepository();
         
         $this->competencia = $this->service->getCompetencia();
-        
     }
 
     /**
@@ -33,29 +31,20 @@ class ProcessoTwoController extends Controller {
     public function index() {
         $ano = $this->competencia->format('Y');
         $mes = $this->competencia->format('m');
-        $this->numberFilesToSend = $this->enviosRepo
-                ->getFilesRemaining(Auth::user()->id, 
-                        $mes, 
-                        $ano
-                        );
-        $quantidadesPerRole = $this->enviosRepo->getQuantityPerRole();
+        
+        $this->numberFilesToSend = $this->service
+                ->getFilesRemaining(Auth::user()->id, $mes, $ano
+        );
+        $quantidadesPerRole = $this->service->getQuantityPerRole();
 
 
-        return view('processo_two.index', ['quantidade' => $this->numberFilesToSend, 
-            'mes' =>$mes, 
+        return view('processo_two.index', ['quantidade' => $this->numberFilesToSend,
+            'mes' => $mes,
             'ano' => $ano,
             'quantidadePerRole' => $quantidadesPerRole]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create() {
-        //
-    }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -63,29 +52,18 @@ class ProcessoTwoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(ImageUploadRequest $request) {
-        
-            try {
-                $files = $request->file('fotos');
 
-                $request->handle($files);
+        try {
+            $files = $request->file('fotos');
 
-                return back()->with('status', 'Fotos enviadas com sucesso');
-            } catch (\Exception $ex) {
-                return back()->withErrors([$ex->getMessage()]);
-            } catch (PostTooLargeException $poe ){
-                return back()->withErrors();
-            }
-        
-    }
+            $request->handle($files);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-        //
+            return back()->with('status', 'Fotos enviadas com sucesso');
+        } catch (\Exception $ex) {
+            return back()->withErrors([$ex->getMessage()]);
+        } catch (PostTooLargeException $poe) {
+            return back()->withErrors();
+        }
     }
 
     /**
@@ -95,9 +73,9 @@ class ProcessoTwoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        try{
+        try {
             $this->service->delete($id);
-            
+
             return back()->with('status', 'Foto deletada');
         } catch (\Exception $ex) {
             return back()->withErrors([$ex->getMessage()]);
@@ -112,20 +90,21 @@ class ProcessoTwoController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id) {
-        
-        $rules = \Illuminate\Support\Facades\Validator::make($request->all(), [
-            'data' => 'required',
-            'local' => 'required'
+
+        $rules = Validator::make($request->all(), [
+                    'data' => 'required',
+                    'legenda' => 'required'
         ]);
-        
-        if( !$rules->passes() ){
-            
-            
-            return response()->json(['error'=>$rules->errors()->all()]);
+
+        if (!$rules->passes()) {
+
+            return response()->json(['error' => $rules->errors()->all()]);
         }
-        try{
-            $this->service->update( $request->all() );
+        
+        try {
             
+            $this->service->update($request->all());
+
             return response()->json(['success' => 'Informações atualizadas']);
             
         } catch (\Exception $ex) {
@@ -142,18 +121,21 @@ class ProcessoTwoController extends Controller {
      */
     public function destroy($id) {
         try {
-            
-            $this->service->delete( $id );
-            
-        } catch (\Exception $exc) {
-            throw new \Exception( $exc );
-        }
 
-        
+            $this->service->delete($id);
+        } catch (\Exception $exc) {
+            throw new \Exception($exc);
+        }
     }
 
     public function getPhotos() {
-        return $this->enviosRepo->getAlreadySent(Auth::user()->id, $this->competencia->format('m'), $this->competencia->format('Y'));
+        return $this->arquivosRepo
+                        ->getArquivosBy(
+                                $this->competencia->format('m'), 
+                                $this->competencia->format('Y'), 
+                                \App\Arquivo::FILE_FOTO_VISITA, 
+                                Auth::user()->id
+        );
     }
 
 }

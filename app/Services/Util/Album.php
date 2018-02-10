@@ -4,7 +4,7 @@ namespace App\Services\Util;
 
 
 class Album{
-    private $enviosRepo;
+    private $service;
 
     public $user;
 
@@ -17,13 +17,13 @@ class Album{
 
     public function __construct(int $user, int $mes, int $ano)
     {
-        $this->enviosRepo = new \App\Repositories\EnviosProcessoTwoRepository();
+        $this->service = new \App\Services\ProcessoTwoService();
         $this->user = \App\User::find($user);
         
         $this->ano = $ano;
         $this->mes = $mes;
         
-        $this->fotos = $this->enviosRepo->getAlreadySent($this->user->id, $mes, $ano);
+        $this->fotos = $this->service->getAlreadySent($this->user->id, $mes, $ano);
     }
 
     
@@ -37,7 +37,7 @@ class Album{
     }
 
     public function getEnviosRepo() {
-        return $this->enviosRepo;
+        return $this->service;
     }
 
     public function getUser() {
@@ -51,10 +51,7 @@ class Album{
     public function getAno() {
         return $this->ano;
     }
-
-    public function setEnviosRepo($enviosRepo) {
-        $this->enviosRepo = $enviosRepo;
-    }
+    
 
     public function setUser($user) {
         $this->user = $user;

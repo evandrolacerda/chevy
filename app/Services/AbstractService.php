@@ -1,7 +1,8 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Support\Facades\Auth;
+use App\Repositories\ArquivosRepository;
+use App\Repositories\ProcessoRepository;
 use App\User;
 use App\Role;
 use App\Processo;
@@ -15,7 +16,7 @@ use App\Processo;
 abstract class AbstractService {
 
     protected $processoRepo;
-    protected $enviosProcessoRepo;
+    protected $arquivosRepo;
     protected $rolesParticipants;
     protected $currentMonth;
     protected $currentYear;
@@ -25,7 +26,9 @@ abstract class AbstractService {
         $this->currentMonth = date('m');
         $this->currentYear = date('Y');
 
-        $this->processoRepo = new \App\Repositories\ProcessoRepository(new \App\Processo(), new \App\Role());
+        $this->processoRepo = new ProcessoRepository(new Processo(), new Role());
+        
+        $this->arquivosRepo = new ArquivosRepository();
         
         $this->rolesParticipants = $this->getRolesParticipants(static::PROCESSO_ID);
         

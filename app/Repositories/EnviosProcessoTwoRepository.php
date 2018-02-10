@@ -4,6 +4,9 @@ namespace App\Repositories;
 
 use App\QuantidadeEnviosVisitas;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\ArquivosRepository;
+use App\Arquivo;
+
 
 /**
  * Description of EnviosProcessoTwo
@@ -13,46 +16,20 @@ use Illuminate\Support\Facades\Auth;
 class EnviosProcessoTwoRepository {
 
     private $enviosModel;
-
+    private $arquivoRepo;
     public function __construct() {
         $this->enviosModel = new \App\ProcessoTwoEnvios();
+        $this->arquivoRepo = new \App\Repositories\ArquivosRepository();
     }
 
-    public function getCountFilesSent(int $userId, $month, $year) {
+    
 
-        $count = $this->enviosModel->newQuery()
-                ->where('user_id', $userId)
-                ->where('mes', $month)
-                ->where('ano', $year)
-                ->get()
-                ->count();
+    
 
-
-        return $count;
-    }
-
-    public function getAlreadySent(int $userId, $month, $year) {
-
-        $data = $this->enviosModel->newQuery()
-                ->where('user_id', $userId)
-                ->where('mes', $month)
-                ->where('ano', $year)
-                ->get();
-
-        return $data;
-    }
-
-    public function getFilesRemaining(int $userId, $month, $year) {
-        $quantidadesRole = $this->getQuantityPerRole();
-        $enviados = $this->getCountFilesSent($userId, $month, $year);
-
-        $remaining = $quantidadesRole - $enviados;
-
-        return $remaining;
-    }
+    
 
     public function update($data) {
-        $envio = \App\ProcessoTwoEnvios::find($data['id']);
+        $envio = Arquivo::find($data['id']);
 
         $envio->legenda = $data['local'];
         $envio->data = $data['data'];
@@ -61,12 +38,14 @@ class EnviosProcessoTwoRepository {
 
         return $envio;
     }
+    
+    
 
     public function save($data) {
-        $model = new \App\ProcessoTwoEnvios();
+        $model = new \App\Arquivo();
         $model->user_id = $data['user_id'];
-        $model->mes = $data['mes'];
-        $model->ano = $data['ano'];
+        $model->mes     = $data['mes'];
+        $model->ano     = $data['ano'];
         $model->processo_id = 2;
         $model->arquivo = 'storage/' . $data['path'];
         $model->thumbs_path = 'storage/thumbs/' . $data['path'];
@@ -76,7 +55,7 @@ class EnviosProcessoTwoRepository {
     }
 
     public function delete($id) {
-        $envio = \App\ProcessoTwoEnvios::find($id);
+        $envio = \App\Arquivo::find($id);
 
         try {
             $envio->delete();
@@ -87,28 +66,9 @@ class EnviosProcessoTwoRepository {
     
     
     public function find($id) {
-        return \App\ProcessoTwoEnvios::find( $id );
+        return \App\Arquivo::find( $id );
     }
     
-    public function getQuantityPerRole() {
-        return QuantidadeEnviosVisitas::where('role_id', Auth::user()->role->id)
-                        ->first()
-                ->quantidade;
-    }
-
-    public function getAlbumsFrom(int $mes, int $ano, $userId = null){
-        
-        $query = $this->enviosModel->newQuery()
-            ->where('mes', $mes)
-            ->where('ano', $ano);
-            
-
-        if( $userId ){
-            $query->where('user_id', $userId );
-        }
-
-        return $query->get();
-               
-    }
+    
 
 }

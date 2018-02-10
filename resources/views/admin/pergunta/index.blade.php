@@ -34,11 +34,22 @@
 <div id="loader">
 
 </div>
+
 <div class="panel panel-default">
     <div class="panel-heading">
         Perguntas
     </div>
     <div class="panel-body">
+
+        <div class="pull-right">
+            <a href="/admin/pergunta/create" class="btn btn-success btn-sm">
+                Criar nova Pergunta
+                <span class="glyphicon glyphicon-plus-sign"></span>
+            </a>
+        </div>
+        <br>
+        <br>
+
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -94,9 +105,9 @@
             var url = "/admin/pergunta/" + id;
 
             var token = document.head.querySelector('meta[name="csrf-token"]');
-            
-            console.log( token.content );
-            
+
+            console.log(token.content);
+
             data = {
                 '_method': 'DELETE',
                 '_token': token.content,

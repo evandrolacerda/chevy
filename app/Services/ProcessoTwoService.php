@@ -8,6 +8,9 @@ use App\Events\ScoreEvent;
 use Illuminate\Support\Facades\Auth;
 use App\User;
 use Illuminate\Support\Facades\Storage;
+use App\Arquivo;
+use App\QuantidadeEnviosVisitas;
+
 /**
  * Description of ProcessoOneService
  *
@@ -17,20 +20,11 @@ class ProcessoTwoService extends AbstractService {
 
     const PROCESSO_ID = 2;
 
-    protected $enviosProcessoRepo;
-
-    public function __construct() {
-        parent::__construct();
-
-        $this->enviosProcessoRepo = new \App\Repositories\EnviosProcessoTwoRepository();
-    }
-
     public function save(array $data) {
         if ($this->isAvailableToAction(Auth::user())) {
 
             try {
-                $this->enviosProcessoRepo->save($data);
-
+                $this->arquivosRepo->save($data);
             } catch (\Exception $ex) {
                 throw new \Exception($ex);
             }
@@ -56,7 +50,9 @@ class ProcessoTwoService extends AbstractService {
 
     public function update($data) {
         try {
-            $this->enviosProcessoRepo->update($data);
+
+
+            $this->arquivosRepo->update($data, $data['id']);
 
             $mes = $this->getCompetencia()->format('m');
             $ano = $this->getCompetencia()->format('Y');
@@ -73,22 +69,28 @@ class ProcessoTwoService extends AbstractService {
         $ano = $this->getCompetencia()->format('Y');
         $userId = Auth::user()->id;
 
-        if( $this->enviosProcessoRepo->getFilesRemaining($userId, $mes, $ano) > 0 )
-        {
+        $countSent = $this->arquivosRepo->getArquivosBy(
+                        $mes, $ano, Arquivo::FILE_FOTO_VISITA, $userId
+                )->count();
+
+        $allowed = QuantidadeEnviosVisitas::where('role_id', Auth::user()->role->id)
+                        ->first()
+                ->quantidade;
+
+        if ($allowed - $countSent > 0) {
             return false;
         }
-        
-        
-        $envios = $this->enviosProcessoRepo->getAlreadySent($userId, $mes, $ano );
-        
-        
-        foreach ( $envios as $envio )
-        {
-            if( $envio->legenda == null || $envio->data == null ){
+
+
+        $envios = $this->arquivosRepo->getArquivosBy($mes, $ano, Arquivo::FILE_FOTO_VISITA, $userId);
+
+
+        foreach ($envios as $envio) {
+            if ($envio->legenda == null || $envio->data == null) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -105,44 +107,87 @@ class ProcessoTwoService extends AbstractService {
 
         $competencia = new \DateTime();
 
-        if ( $today <= $secondBussinessDay ) {
-            $competencia->sub( new \DateInterval('P1M') );
+        if ($today <= $secondBussinessDay) {
+            $competencia->sub(new \DateInterval('P1M'));
         }
-        
-        
+
+
 
         return $competencia;
     }
-    
+
     public function delete($id) {
-        
-        try{
-            $envio = $this->enviosProcessoRepo->find( $id );
-            
+
+        try {
+
+            $envio = $this->arquivosRepo->find($id);
+
             //dd(str_after($envio->thumbs_path, 'storage'));
-        Storage::delete('public/' . str_after($envio->thumbs_path, 'storage'));
-        
+            Storage::delete('public/' . str_after($envio->thumbs_path, 'storage'));
+
             Storage::delete('public/' . str_after($envio->arquivo, 'storage'));
-            
+
             //deleta os pontos se houver
             $pontos = \App\Pontuacao::where('user_id', $envio->user_id)
                     ->where('mes', $envio->mes)
                     ->where('ano', $envio->ano)
-                    ->where('processo_id', $envio->processo->id )
+                    ->where('processo_id', $envio->processo_id)
                     ->first();
-            
-            if( $pontos !== null ){
+
+
+            if ($pontos !== null) {
                 $pontos->delete();
             }
-            
+
             //deleta o envio do banco de dados
-            $this->enviosProcessoRepo->delete($id);
-            
-            
-            
+            $this->arquivosRepo->delete($id);
         } catch (\Exception $ex) {
-            throw new \Exception( $ex );
+            throw new \Exception($ex);
         }
+    }
+
+    public function getCountFilesSent(int $userId, $month, $year) {
+
+        return $this->arquivosRepo
+                        ->getArquivosBy(
+                                $month, $year, Arquivo::FILE_FOTO_VISITA, $userId)
+                        ->count();
+    }
+
+    public function getAlreadySent(int $userId, $month, $year) {
+
+        $data = $this->arquivosRepo->getArquivosBy($month, $year, Arquivo::FILE_FOTO_VISITA, $userId);
+
+        return $data;
+    }
+
+    public function getFilesRemaining(int $userId, $month, $year) {
+        $quantidadesRole = $this->getQuantityPerRole();
+        $enviados = $this->getCountFilesSent($userId, $month, $year);
+
+        $remaining = $quantidadesRole - $enviados;
+
+        return $remaining;
+    }
+
+    public function getQuantityPerRole() {
+        return QuantidadeEnviosVisitas::where('role_id', Auth::user()->role->id)
+                        ->first()
+                ->quantidade;
+    }
+
+    public function getAlbumsFrom(int $mes, int $ano, $userId = null) {
+
+        $query = $this->enviosModel->newQuery()
+                ->where('mes', $mes)
+                ->where('ano', $ano);
+
+
+        if ($userId) {
+            $query->where('user_id', $userId);
+        }
+
+        return $query->get();
     }
 
 }
