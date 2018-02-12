@@ -10,8 +10,8 @@ class Prova extends Model
     
     public function perguntas() {
         
-        return $this->belongsToMany(\App\Pergunta::class, 'prova_perguntas')
-                ->withPivot('resposta');
+        return $this->hasMany(\App\Pergunta::class);
+                
     }
     
     public function user() {

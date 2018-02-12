@@ -50,5 +50,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function 
     Route::resource('planejamento', 'Admin\PlanejamentoController');
     Route::resource('visitas', 'Admin\VisitasController');
     Route::resource('pontuacao', 'Admin\PontuacaoController');
+    Route::resource('/prova', 'Admin\ProvaController');
 });
 

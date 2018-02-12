@@ -1,18 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin    ;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ProvaController extends Controller
+class AdminProva extends Controller
 {
-    private  $provasRepo;
-    
-    
-    public function __construct() {
-        $this->provasRepo = new \App\Repositories\ProvaRepository();
-    }
     /**
      * Display a listing of the resource.
      *
@@ -20,11 +13,7 @@ class ProvaController extends Controller
      */
     public function index()
     {
-        
-        
-        $provas = $this->provasRepo->all();
-        
-        return view('admin.prova.index', compact('provas'));
+        return view('admin.prova.index');
     }
 
     /**
@@ -34,7 +23,7 @@ class ProvaController extends Controller
      */
     public function create()
     {
-        return view('admin.prova.create');
+        //
     }
 
     /**
@@ -45,30 +34,7 @@ class ProvaController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'questao.*' => 'required',
-            'mes' => 'required',
-            'ano' => 'required'
-        ]);
-        
-        $prova = new \App\Prova();
-        
-        $prova->mes = $request->input('mes');
-        $prova->ano = $request->input('ano');
-        
-        $prova->save();
-        
-        
-        
-        foreach ( $request->input('questao') as $questao )
-        {
-            $perguntaModel = new \App\Pergunta();
-            $perguntaModel->pergunta = $questao;            
-            $prova->perguntas()
-                    ->save($perguntaModel);
-        }
-        
-      return redirect('/admin/treinamento');
+        //
     }
 
     /**
@@ -79,9 +45,7 @@ class ProvaController extends Controller
      */
     public function show($id)
     {
-        $prova = \App\Prova::find($id);
-        
-        return view('admin.prova.show', compact('prova'));
+        //
     }
 
     /**

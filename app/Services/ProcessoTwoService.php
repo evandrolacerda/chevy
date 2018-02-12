@@ -51,7 +51,6 @@ class ProcessoTwoService extends AbstractService {
     public function update($data) {
         try {
 
-
             $this->arquivosRepo->update($data, $data['id']);
 
             $mes = $this->getCompetencia()->format('m');

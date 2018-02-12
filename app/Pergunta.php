@@ -6,13 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pergunta extends Model
 {
+    public $fillable = [
+      'pergunta'  
+    ];
     
     public function prova() {
-        return $this->belongsToMany(\App\Prova::class, 'prova_perguntas')->withPivot('resposta');
+        return $this->belongsTo(\App\Prova::class);
     }
     
-    public function processo()
+    public function resposta()
     {
-        return $this->belongsTo(\App\Processo::class);
-    }
+        return $this->hasMany(\App\Resposta::class);
+    }    
+    
 }

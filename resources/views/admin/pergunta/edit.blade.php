@@ -17,18 +17,7 @@
                     <textarea name="pergunta" id="pergunta" class="form-control" rows="<5></5>">{{$pergunta->pergunta}}</textarea>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="processo" class="control-label col-md-3 col-sm-3 col-xs-12">
-                    Processo
-                </label>
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <select name="processo" id="processo" class="form-control">
-                        @foreach( $processos as $processo)
-                        <option value="{{$processo->id}}" @if($pergunta->processo->id === $processo->id) selected @endif>{{$processo->nome}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+            
             <div class="form-group">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
                     <button type="reset" class="btn btn-danger">Cancelar</button>

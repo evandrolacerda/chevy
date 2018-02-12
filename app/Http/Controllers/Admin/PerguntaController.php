@@ -90,13 +90,11 @@ class PerguntaController extends Controller {
         
         try{
             $pergunta->pergunta = $request->input('pergunta');
-            $pergunta->processo_id = $request->input('processo');
-            
             
             $pergunta->save();
             
-            
-            return redirect('/admin/pergunta')->with('status', 'Pergunta atualizada com sucesso');
+            return redirect("/admin/prova/{$pergunta->prova_id}")
+                    ->with('status', 'Pergunta atualizada com sucesso');
             
         } catch (\Exception $ex) {
 

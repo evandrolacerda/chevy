@@ -6,21 +6,38 @@ use Illuminate\Http\Request;
 use App\RoleInterface;
 use Illuminate\Support\Facades\Auth;
 
-class ProcessoFiveController extends Controller
-{
+
+class ProcessoFiveController extends Controller {
+
+    private $provasRepo;
+    private $service;
+    
+    public function __construct() {
+        $this->provasRepo = new \App\Repositories\ProvaRepository(); 
+        $this->service = new \App\Services\TreinamentoService();
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        if(in_array(Auth::user()->role->id, [RoleInterface::DIRETOR_VENDAS, RoleInterface::GERENTE_VENDAS]) ){
-            return view('processo_five.ata');            
+    public function index() {
+        if (in_array(Auth::user()->role->id, [
+                    RoleInterface::DIRETOR_VENDAS,
+                    //RoleInterface::GERENTE_VENDAS
+                ])) {
+            return view('processo_five.ata');
         }
+        $mes = date('m');
+        $ano = date('Y');
         
-        return view('processo_five.index');
+        $prova = $this->provasRepo->getAvailable( $mes, $ano );
         
+        $applicacaoProva = new \App\Services\Util\AplicacaoProva($prova, Auth::user() );
+        
+        
+        
+        return view('processo_five.prova', ['prova' => $applicacaoProva]);
     }
 
     /**
@@ -28,8 +45,7 @@ class ProcessoFiveController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
@@ -39,9 +55,16 @@ class ProcessoFiveController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        
+        $this->validate($request, [
+            'questao.*' => 'required'
+        ]);
+        
+        $this->service->save($request->all());
+        
+        return back()->with('status', 'Prova salva');
+            
     }
 
     /**
@@ -50,8 +73,7 @@ class ProcessoFiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public function show($id) {
         //
     }
 
@@ -61,8 +83,7 @@ class ProcessoFiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
+    public function edit($id) {
         //
     }
 
@@ -73,8 +94,7 @@ class ProcessoFiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
     }
 
@@ -84,12 +104,12 @@ class ProcessoFiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
     }
-    
+
     public function ata(Request $request) {
         
     }
+
 }

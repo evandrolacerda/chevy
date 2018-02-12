@@ -134,6 +134,9 @@
                             <a href="/admin/usuarios" class="list-group-item">
                                 <i class="fa fa-users"></i> Usuarios
                             </a>
+                            <a href="/admin/regioes" class="list-group-item">
+                                <i class="fa fa-users"></i> Regiões
+                            </a>
                             <a href="/admin/regiao" class="list-group-item">
                                 <i class="fa fa-globe"></i> Regiões
                             </a>
