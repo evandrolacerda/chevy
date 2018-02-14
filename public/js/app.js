@@ -1103,6 +1103,10 @@ Vue.component('photo', __webpack_require__(49));
 Vue.component('gallery', __webpack_require__(52));
 Vue.component('user-menu', __webpack_require__(55));
 
+Echo.private('App.User.' + window.userId.content).notification(function (notification) {
+    console.log(notification);
+});
+
 var app = new Vue({
     el: '#app',
     methods: {
@@ -48379,20 +48383,36 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            notifications: []
+            notifications: [],
+
+            unreadMessages: 0
         };
     },
     created: function created() {
-        //axios.get('/notifications').then( function(response){
-        //    this.notifications = response.data;
-        //} );
         var that = this;
-        window.Echo.private('App.User.' + window.userId.content).listen('ScoreEvent', function (data) {
-            that.notifications.push(data.processo);
+        axios.get('/notifications').then(function (response) {
+            that.notifications = response.data;
+            that.unreadMessages++;
+        });
+
+        Echo.private('App.User.' + window.userId.content).notification(function (notification) {
+            that.notifications.push(notification);
         });
     },
     mounted: function mounted() {
@@ -48413,17 +48433,30 @@ var render = function() {
     _vm._v(" "),
     _c(
       "ul",
-      { staticClass: "dropdown-menu" },
+      { staticClass: "list-notificacao dropdown-menu" },
       _vm._l(_vm.notifications, function(notification) {
-        return _c("li", [
-          _c("a", { attrs: { href: "#" } }, [
-            _vm._v(
-              "\n                        Você ganhou " +
-                _vm._s(notification.pontos) +
-                " pelo processo " +
-                _vm._s(_vm.notifications.processo_id) +
-                "\n                    "
-            )
+        return _c("li", { attrs: { id: "item_notification_1" } }, [
+          _c("div", { staticClass: "media" }, [
+            _vm._m(1, true),
+            _vm._v(" "),
+            _c("div", { staticClass: "media-body" }, [
+              _vm._m(2, true),
+              _vm._v(" "),
+              _c("h4", { staticClass: "media-heading" }, [
+                _vm._v("Pontuação elevada")
+              ]),
+              _vm._v(" "),
+              _c("p", [
+                _vm._v(
+                  "Sua Pontuação foi elevada em " +
+                    _vm._s(notification.data.pontos) +
+                    " pontos por ter completado o proceso " +
+                    _vm._s(notification.data.processo)
+                )
+              ]),
+              _vm._v(" "),
+              _c("small", [_vm._v(_vm._s(notification.created_at))])
+            ])
           ])
         ])
       })
@@ -48448,11 +48481,49 @@ var staticRenderFns = [
         }
       },
       [
-        _c("span", { staticClass: "glyphicon glyphicon-bell bell_b" }),
+        _c("span", {
+          staticClass: "glyphicon glyphicon-bell alertNotificacao"
+        }),
         _vm._v(" "),
-        _c("span", { staticClass: "badge badge-notify" }, [_vm._v("2")])
+        _c("span", { staticClass: "badgeAlert" }, [_vm._v("2")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "caret" })
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "media-left" }, [
+      _c("a", { attrs: { href: "#" } }, [
+        _c("img", {
+          staticClass: "media-object",
+          attrs: {
+            alt: "64x64",
+            "data-src": "holder.js/64x64",
+            src:
+              "https://cdn4.iconfinder.com/data/icons/trophy-and-awards-1/64/Icon_Medal_Trophy_Awards_Blue-256.png",
+            "data-holder-rendered": "true"
+          }
+        })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "exclusaoNotificacao" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger btn-xs button_exclusao",
+          attrs: { id: "1", onclick: "excluirItemNotificacao(this)" }
+        },
+        [_vm._v("x")]
+      )
+    ])
   }
 ]
 render._withStripped = true

@@ -78,15 +78,18 @@ class ProcessoOneService extends AbstractService {
     public function isAvailableToAction(User $user) {
 
         $initialDate = Carbon::create($this->currentYear, $this->currentMonth, 01);
+        //$initialDate = Carbon::create(2018, 03, 01);
 
         //processo pode ser realizado até o segundo dia útil do mês
         $limitDate = Calendar::getAllBussinnesDayFrom($this->currentMonth, $this->currentYear)[1];
+        //$limitDate = Calendar::getAllBussinnesDayFrom(3, 2018)[1];
 
 
-        //$today = Carbon::create('2018', '02', '04');
-        $today = \Carbon\Carbon::now();
+        $today = Carbon::create('2018', '03', '02');
+        //$today = \Carbon\Carbon::now();
         //dd( $user->role->id, $this->rolesParticipants);
-        if (in_array($user->role->id, $this->rolesParticipants) && ( $today >= $initialDate && $today <= $limitDate )) {
+        if (in_array($user->role->id, $this->rolesParticipants) &&
+                ( $today >= $initialDate && $today <= $limitDate )) {
 
             return true;
         }
@@ -96,11 +99,46 @@ class ProcessoOneService extends AbstractService {
 
     public function getPlanilhaMetas(int $month, int $year, User $user) {
 
-        return $this->arquivosRepo->getArquivosBy($month, $year, Arquivo::FILE_PLANILHA_METAS, $user->id);
+        return $this->arquivosRepo->getArquivosBy(
+                        $month, $year, Arquivo::FILE_PLANILHA_METAS, $user->id
+        );
     }
 
     public function getPlanilhaVisitas(int $month, int $year, User $user) {
-        return $this->arquivosRepo->getArquivosBy($month, $year, Arquivo::FILE_PLANILHA_VISITAS, $user->id);
+        return $this->arquivosRepo->getArquivosBy(
+                        $month, $year, Arquivo::FILE_PLANILHA_VISITAS, $user->id);
+    }
+
+    public function showFormMeta($mes, $ano, \App\User $user) {
+        if (!$this->isAvailableToAction($user)) {
+            return false;
+        }
+
+        
+        $envioArquivo = $this->arquivosRepo->getArquivosBy(
+                $mes, $ano, Arquivo::FILE_PLANILHA_METAS, $user->id
+        );
+        
+        
+        return $envioArquivo->count() === 0;
+        
+        
+    }
+    
+    public function showFormVisita($mes, $ano, \App\User $user) {
+        if (!$this->isAvailableToAction($user)) {
+            return false;
+        }
+
+        
+        $envioArquivo = $this->arquivosRepo->getArquivosBy(
+                $mes, $ano, Arquivo::FILE_PLANILHA_VISITAS, $user->id
+        );
+        
+        
+        return $envioArquivo->count() === 0;
+        
+        
     }
 
 }

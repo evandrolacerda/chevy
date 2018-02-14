@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\FormPlanilhaVisitasRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Services\ProcessoOneService;
@@ -25,16 +24,10 @@ class ProcessoOneController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $showFormMetas = $this->processoService
-                        ->getPlanilhaMetas(
-                                $this->month, $this->year, Auth::user())
-                        ->count() === 0;
-        
-        
-        $showFormVisitas = $this->processoService
-                        ->getPlanilhaVisitas(
-                                $this->month, $this->year, Auth::user()
-                        )->count() === 0;
+        $showFormMetas = $this->processoService->showFormMeta($this->month, $this->year, Auth::user());
+                                
+        $showFormVisitas = $this->processoService->showFormVisita($this->month, $this->year, Auth::user());
+                        
 
 
 

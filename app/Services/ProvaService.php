@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
  *
  * @author evandro
  */
-class TreinamentoService extends AbstractService {
+class ProvaService extends AbstractService {
 
     const PROCESSO_ID = 5;
 
@@ -42,6 +42,7 @@ class TreinamentoService extends AbstractService {
             
             $prova = \App\Prova::find( $data['prova_id']);
             $this->aplicacaoProva = new \App\Services\Util\AplicacaoProva($prova, Auth::user());
+            
             
 
             $this->pontuar(

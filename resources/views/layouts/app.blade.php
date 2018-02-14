@@ -17,6 +17,7 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
 
+        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
         <style>
             input.hidden {
                 position: absolute;
@@ -56,17 +57,20 @@
                     <div class="collapse navbar-collapse" id="app-navbar-collapse">
                         <!-- Left Side Of Navbar -->
                         <ul class="nav navbar-nav">
-                            &nbsp;
                         </ul>
 
                         <!-- Right Side Of Navbar -->
                         <ul class="nav navbar-nav navbar-right">
+
+                            <li>
+                            
+                            </li>
+                            <notifications></notifications>
                             <!-- Authentication Links -->
                             @guest
                             <li><a href="{{ route('login') }}">Login</a></li>
                             @else
-                            
-                            <notifications></notifications>
+
                             <!--
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
@@ -90,7 +94,7 @@
                                     <li>
                                         <a href="{{ route('logout') }}"
                                            onclick="event.preventDefault();
-    document.getElementById('logout-form').submit();">
+                                                   document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
 

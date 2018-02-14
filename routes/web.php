@@ -19,6 +19,14 @@ Route::get('/info', function() {
 });
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/not', function(){
+   $pontuacao = \App\Pontuacao::find(48);
+   
+   $user = \App\User::find( 10 );
+   
+   $user->notify( new \App\Notifications\ScoreUpdated($pontuacao));
+});
+
 Route::middleware(['auth', 'check.admin'])->group(function () {
     Route::resource('/', 'IndexController');
     Route::resource('/teste', 'TesteController');
@@ -33,6 +41,9 @@ Route::middleware(['auth', 'check.admin'])->group(function () {
     Route::resource('/ranking', 'RankingController');
     Route::resource('/processos', 'ProcessosController');
     Route::get('/album', 'ProcessoTwoController@getPhotos');
+    Route::get('/notifications', 'NotificationController@index');
+    Route::post('/ata', 'ProcessoFiveController@ata');
+    Route::post('/foto', 'ProcessoFiveController@foto');
 });
 
 

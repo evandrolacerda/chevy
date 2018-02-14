@@ -23,17 +23,22 @@ Vue.component('gallery', require('./components/gallery.vue'));
 Vue.component('user-menu', require('./components/Menu.vue'));
 
 
+Echo.private('App.User.' + window.userId.content)
+        .notification((notification) => {
+            console.log(notification);
+        });
+
 const app = new Vue({
     el: '#app',
     methods: {
-      addPhoto( newPhoto )
-      {
-          Vue.set(app.gallery);
-      }
+        addPhoto(newPhoto)
+        {
+            Vue.set(app.gallery);
+        }
     },
-    
+
     created() {
-        bus.$emit('botao-clicado', 15 );
+        bus.$emit('botao-clicado', 15);
 
     }
 });

@@ -57,7 +57,7 @@ class FormPlanilhaMetasRequest extends FormRequest {
                         $this->file('metas')->getClientOriginalExtension());
 
 
-                $this->file('metas')->storeAs('publi/metas/', $nomePlanilha);
+                $this->file('metas')->storeAs('public/metas/', $nomePlanilha);
 
                 $data = [
                     'tipo_arquivo_id' => Arquivo::FILE_PLANILHA_METAS,

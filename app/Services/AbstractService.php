@@ -65,6 +65,7 @@ abstract class AbstractService {
 
         if ($this->shouldScore()) {
             try {
+        
                 $user = \App\User::find($userId);
                 $pontuacao = new \App\Pontuacao();
 
@@ -77,7 +78,8 @@ abstract class AbstractService {
 
                 $pontuacao->save();
 
-                event(new \App\Events\ScoreEvent($pontuacao));
+                $user->notify( new \App\Notifications\ScoreUpdated($pontuacao));
+                
             } catch (\Exception $exc) {
                 throw new \Exception($exc);
             }

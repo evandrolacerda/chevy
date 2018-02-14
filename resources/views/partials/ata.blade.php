@@ -3,7 +3,7 @@
         Ata de Treinamento
     </div>
     <div class="panel-body">
-        <form method="post" action="{{url('/treinamento/ata')}}" enctype="multipart/form-data" class="form-horizontal">
+        <form method="post" action="{{url('/ata')}}" enctype="multipart/form-data" class="form-horizontal">
             <div class="form-group">
                 {{csrf_field()}}
                 <div class="col-md-12">

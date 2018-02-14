@@ -68,7 +68,7 @@ class FormPlanilhaVisitasRequest extends FormRequest {
                 'mes' => date('m'),
                 'ano' => date('Y'),
                 'user_id' => Auth::user()->id,
-                'processo_id' => 2
+                'processo_id' => 1
                 
             ];
 
