@@ -37,7 +37,7 @@
                 <span class="glyphicon glyphicon-flag"></span>
                 {{legenda}}
             </p>
-            <p><span class="glyphicon glyphicon-time"></span>{{data}}</p>
+            <p><span class="glyphicon glyphicon-time"></span>{{data | formatDate}}</p>
         </div>
         <a href="#" :data-id="id" class="btn btn-danger btn-block btn-xs deletar">Deletar</a>
     </div>

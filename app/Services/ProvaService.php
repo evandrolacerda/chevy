@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Description of TreinamentoService
@@ -29,13 +30,22 @@ class ProvaService extends AbstractService {
 
         
         try {
-
+            
+            DB::beginTransaction();
+            
+            $provaAplicada = new \App\ProvaRespondida();
+            $provaAplicada->prova_id = $data['prova_id'];
+            $provaAplicada->user_id = Auth::user()->id;
+            
+            $provaAplicada->save();
+            
             foreach ($data['questao'] as $key => $value) {
                 $resposta = new \App\Resposta();
 
-                $resposta->user_id = Auth::user()->id;
+                
                 $resposta->pergunta_id = $key;
                 $resposta->resposta = $value;
+                $resposta->prova_resp_id = $provaAplicada->id;
 
                 $resposta->save();
             }
@@ -48,7 +58,9 @@ class ProvaService extends AbstractService {
             $this->pontuar(
                     $prova->mes, $prova->ano, Auth::user()->id
             );
+            DB::commit();
         } catch (\Exception $ex) {
+            DB::rollBack();
             throw new \Exception($ex);
         }
     }

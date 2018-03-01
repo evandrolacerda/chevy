@@ -14,7 +14,8 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        return Auth::user()->notifications->take(5);
+        
+        return Auth::user()->notifications()->whereNull('read_at')->get();
     }
 
     /**
@@ -69,7 +70,13 @@ class NotificationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $notification = \App\Notification::find( $id );
+        
+        $notification->read_at = now();
+        
+        $notification->save();
+        
+        return response()->json(['success' => true ]);
     }
 
     /**

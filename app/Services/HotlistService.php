@@ -39,7 +39,6 @@ class HotlistService extends AbstractService{
             {
                 $this->pontuar( $data['mes'], $data['ano'], $data['user_id'] );
                 
-                $pontos = $this->getPointsFor($user->role);
                 
                 $processamento = new \App\HotlistProcessamento();
                 $processamento->mes = $data['mes'];

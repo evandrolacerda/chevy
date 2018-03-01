@@ -17,11 +17,15 @@ class AplicacaoProva {
     public $prova;
     public $respostas;
     public $user;
+    public $provaRespondida;
 
     public function __construct(Prova $prova, User $user) {
         
         $this->user = $user;
         $this->prova = $prova;
+        $this->provaRespondida = \App\ProvaRespondida::where('user_id', $user->id)
+                ->where('prova_id', $this->prova->id)
+                ->first();
         
         $this->respostas = [];
         
@@ -29,8 +33,12 @@ class AplicacaoProva {
     }
 
     private function fetchRepostas() {
+        if( $this->provaRespondida === null ){
+            return;
+        }
+        
         foreach ($this->prova->perguntas as $pergunta) {
-            $resposta = Resposta::where('user_id', $this->user->id)
+            $resposta = Resposta::where('prova_resp_id', $this->provaRespondida->id)
                     ->where('pergunta_id', $pergunta->id)
                     ->first();
             

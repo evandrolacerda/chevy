@@ -26,7 +26,7 @@ class RegiaoController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.regiao.create');
     }
 
     /**
@@ -37,7 +37,13 @@ class RegiaoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'nome' => 'required'
+        ]);
+        
+        $regiao = \App\Regiao::create( $request->all());
+        
+        return redirect('/admin/regiao')->with('status', 'Região Cadastrada com sucesso!');
     }
 
     /**
@@ -59,7 +65,10 @@ class RegiaoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $regiao = \App\Regiao::findOrFail( $id );
+        
+        
+        return view('admin.regiao.edit', compact('regiao'));
     }
 
     /**
@@ -71,7 +80,13 @@ class RegiaoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $regiao = \App\Regiao::findOrFail( $id );
+        
+        $regiao->nome = $request->input('nome');
+        
+        $regiao->save();
+        
+        return redirect('/admin/regiao')->with('status', 'Região Atualizada com sucesso');
     }
 
     /**

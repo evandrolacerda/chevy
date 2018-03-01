@@ -128,23 +128,32 @@
                                 <i class="fa fa-flag-checkered"></i> Presença em Loja
                             </a>
                             <a href="/admin/treinamento" class="list-group-item">
-                                <i class="fa fa-book"></i> Treinamento
+                                <i class="fa fa-book"></i> Atas e Fotos de Treinamento
                             </a>
-                            <hr>
+                            <a href="/admin/prova" class="list-group-item">
+                                <i class="fa fa-book"></i> Provas
+                            </a>
+                            <a href="/admin/provas-aplicadas" class="list-group-item">
+                                <i class="fa fa-book"></i> Correção de Provas
+                            </a>
                             <a href="/admin/usuarios" class="list-group-item">
                                 <i class="fa fa-users"></i> Usuarios
-                            </a>
-                            <a href="/admin/regioes" class="list-group-item">
-                                <i class="fa fa-users"></i> Regiões
                             </a>
                             <a href="/admin/regiao" class="list-group-item">
                                 <i class="fa fa-globe"></i> Regiões
                             </a>
+                            
                             <a href="/admin/faixa" class="list-group-item">
-                                <i class="fa fa-globe"></i> Faixas
+                                <i class="fa fa-stripe-s"></i> Faixas
                             </a>
                             <a href="/admin/processo" class="list-group-item">
-                                <i class="fa fa-globe"></i> Processos
+                                <i class="fa fa-step-forward"></i> Processos
+                            </a>
+                            <a href="/admin/pontos" class="list-group-item">
+                                <i class="fa fa-step-forward"></i> Pontos por Processo
+                            </a>
+                            <a href="/admin/feriados" class="list-group-item">
+                                <i class="fa fa-calendar-plus"></i> Feriados
                             </a>
                             
                         </div>        

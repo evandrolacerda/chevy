@@ -22,11 +22,14 @@ Vue.component('photo', require('./components/Photo.vue'));
 Vue.component('gallery', require('./components/gallery.vue'));
 Vue.component('user-menu', require('./components/Menu.vue'));
 
+import moment from 'moment'
 
-Echo.private('App.User.' + window.userId.content)
-        .notification((notification) => {
-            console.log(notification);
-        });
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD/MM/YYYY HH:mm');
+  }
+});
+
 
 const app = new Vue({
     el: '#app',

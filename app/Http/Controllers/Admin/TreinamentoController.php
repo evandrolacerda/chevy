@@ -7,6 +7,15 @@ use App\Http\Controllers\Controller;
 
 class TreinamentoController extends Controller
 {
+    private $arquivosRepo;
+    private $provaRepo;
+            
+    public function __construct() {
+        
+        $this->arquivosRepo = new \App\Repositories\ArquivosRepository();
+        $this->provaRepo = new \App\Repositories\ProvaRepository();
+        
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +23,13 @@ class TreinamentoController extends Controller
      */
     public function index()
     {
-        return view('admin.treinamento.index');
+        $mes = date('m');
+        $ano = date('Y');
+        
+        $fotos = $this->arquivosRepo->getArquivosBy($mes, $ano, \App\Arquivo::FILE_FOTO_TREINAMENTO);
+        $atas = $this->arquivosRepo->getArquivosBy($mes, $ano, \App\Arquivo::FILE_ATA_TREINAMENT0);
+        
+        return view('admin.treinamento.ata', compact('atas', 'fotos'));
     }
 
     /**

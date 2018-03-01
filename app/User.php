@@ -29,6 +29,10 @@ class User extends Authenticatable
         'password', 'remember_token', 'cpf'
     ];
     
+    protected $casts = [
+        'ativo' => 'boolean',
+    ];
+    
     public function role() {
         return $this->belongsTo(\App\Role::class);
     }
@@ -39,5 +43,17 @@ class User extends Authenticatable
     
     public function regiao() {
         return $this->belongsTo(\App\Regiao::class);
+    }
+    
+    public function chefia() {
+        return $this->belongsTo(self::class, 'chefia_id');
+    }
+    
+    public function subordinados() {
+        return $this->hasMany(self::class, 'chefia_id');
+    }
+    
+    public function faixaCorrente() {
+        return $this->faixas()->latest()->first();
     }
 }

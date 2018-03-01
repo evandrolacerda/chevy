@@ -12,8 +12,25 @@ class PresencaController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
-        return view('admin.presenca.index');
+    public function index(Request $request) {
+        $mes = date('m');
+        $ano = date('Y');
+        
+        if( $request->query('mes'))
+        {
+            $mes = $request->query('mes');
+        }
+        
+        if( $request->query('ano'))
+        {
+            $ano = $request->query('ano');
+        }
+        
+        $presencas = \App\PresencaProcessamento::where('mes', $mes)
+                ->where('ano', $ano )
+                ->latest()
+                ->paginate(30);
+        return view('admin.presenca.index', compact('presencas'));
     }
 
     /**
@@ -22,7 +39,7 @@ class PresencaController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        //
+        return view('admin.presenca.create');
     }
 
     /**

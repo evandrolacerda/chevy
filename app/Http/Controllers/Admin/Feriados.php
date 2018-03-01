@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class AdminProva extends Controller
+class Feriados extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +14,9 @@ class AdminProva extends Controller
      */
     public function index()
     {
-        return view('admin.prova.index');
+        $feriados = \App\Feriado::all();
+
+        return view('admin.feriado.index', compact('feriados'));
     }
 
     /**
@@ -23,7 +26,9 @@ class AdminProva extends Controller
      */
     public function create()
     {
-        //
+        $tipos = \App\Feriado::TIPOS_FERIADOS;        
+
+        return view('admin.feriado.create', compact('tipos'));
     }
 
     /**
@@ -34,7 +39,22 @@ class AdminProva extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate( $request, [
+            'data' => 'required',
+            'nome' => 'required',
+            'tipo' => 'required'
+        ]);
+
+        $service = new \App\Services\FeriadoService();
+
+        try{
+            $service->save( $request->all() );
+            return redirect('/admin/feriados')->with('status', 'Feriado Cadastrado com sucesso!');
+        }
+        catch(\Exception $e )
+        {
+            return back()->withErrors([$e->getMessage()]);
+        }
     }
 
     /**
@@ -56,7 +76,10 @@ class AdminProva extends Controller
      */
     public function edit($id)
     {
-        //
+        $feriado = \App\Feriado::find( $id );
+        $tipos = \App\Feriado::TIPOS_FERIADOS;
+
+        return view('admin.feriado.edit',compact('feriado', 'tipos'));
     }
 
     /**
@@ -68,7 +91,7 @@ class AdminProva extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        dd( $request->all() );
     }
 
     /**

@@ -29,7 +29,7 @@ class ProcessoFiveController extends Controller {
 
         if (in_array(Auth::user()->role->id, [
                     RoleInterface::DIRETOR_VENDAS,
-                    RoleInterface::GERENTE_VENDAS
+                    //RoleInterface::GERENTE_VENDAS
                 ])) {
 
 

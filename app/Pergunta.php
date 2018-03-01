@@ -14,9 +14,4 @@ class Pergunta extends Model
         return $this->belongsTo(\App\Prova::class);
     }
     
-    public function resposta()
-    {
-        return $this->hasMany(\App\Resposta::class);
-    }    
-    
 }

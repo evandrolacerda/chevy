@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Validator;
 class CSVFileHandler {
 
     public function handle($file, $mes, $ano) {
-        
-        
-        
+
         $handler = Excel::load($file->getRealPath());
 
         $validation = $this->validateFile($handler);
@@ -27,33 +25,45 @@ class CSVFileHandler {
 
         if ($validation === true) {
             $count = 0;
-            
+
             $handler->each(function( Collection $csvLine ) use($mes, $ano, &$count) {
-                $user = \App\User::where('cpf', $csvLine->get('cpf'))->first();
-
-                $data = [
-                    'cpf' => trim($csvLine->get('cpf')),
-                    'meta' => trim($csvLine->get('meta')),
-                    'atingido' => trim($csvLine->get('atingido')),
-                    'mes' => $mes,
-                    'ano' => $ano,
-                    'user_id' => $user->id
-                ];
-
-
-                //dd($data);
-
-                $service = new \App\Services\HotlistService();
-                $service->save($data);
+                
+                $this->save($csvLine, $mes, $ano );
+                
                 $count++;
             });
-            
+
             return $count;
         }
     }
 
+    private function save( $csvLine, $mes, $ano ) {
+        try {
+
+            $user = \App\User::where('cpf', $csvLine->get('cpf'))->first();
+
+            $data = [
+                'cpf' => trim($csvLine->get('cpf')),
+                'meta' => trim($csvLine->get('meta')),
+                'atingido' => trim($csvLine->get('atingido')),
+                'mes' => $mes,
+                'ano' => $ano,
+                'user_id' => $user->id
+            ];
+
+
+            //dd($data);
+
+            $service = new \App\Services\HotlistService();
+            $service->save($data);
+            
+        } catch (\Illuminate\Database\QueryException $exc) {
+            throw new \Exception($exc);
+        }
+    }
+
     private function validateFormat($data) {
-        $validator = Validator::make($data, [
+            Validator::make($data, [
                     'cpf' => 'required|cpf',
                     'meta' => 'required|int',
                     'atingido' => 'required|int'

@@ -6,6 +6,8 @@
     <li><a href="#">Planejamento</a></li>
 </ol>
 
+<h1>Envios do Processo P1 - Planejamento</h1>
+
 <div class="panel">
     <div class="panel-body">
 
@@ -41,7 +43,6 @@
 
     </div>
 </div>
-<h1>Envios do Processo P1 - Planejamento</h1>
 <div class="panel panel-default">
     <div class="panel-heading">
         Envios do Processo P1 - Processamento

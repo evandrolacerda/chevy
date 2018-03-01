@@ -8,7 +8,7 @@
     <div class="panel-body">
 
         @if( $showFormAta )
-
+            @include('partials.ata')
         @else
         <h1>Ata de Treinamento</h1>
         <table class="table table-bordered table-bordered">

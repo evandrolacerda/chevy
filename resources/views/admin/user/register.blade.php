@@ -1,6 +1,11 @@
 @extends('admin.layouts.app')
 
 @section('content')
+<ol class="breadcrumb">
+  <li><a href="/admin">Admin</a></li>
+  <li><a href="/admin/usuarios">Usuarios</a></li>
+  <li><a href="/admin/register">Adicionar Novo Usuário</a></li>
+</ol>
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-default">
